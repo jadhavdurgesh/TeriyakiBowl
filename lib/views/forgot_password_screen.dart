@@ -33,8 +33,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
-                child: Image.network(
-                  "https://i.pinimg.com/736x/e3/46/35/e34635d7e861c21b9b9c8513ea0780c1.jpg",
+                child: Image.asset(
+                  "assets/logov1.png",
                   height: 160,
                   width: 160,
                 ),
