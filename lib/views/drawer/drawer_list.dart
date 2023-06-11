@@ -107,7 +107,7 @@ class _DrawerListState extends State<DrawerList> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Container(
-                    width: MediaQuery.of(context).size.width * 0.6,
+                    // width: MediaQuery.of(context).size.width * 0.6,
                     height: 180,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
