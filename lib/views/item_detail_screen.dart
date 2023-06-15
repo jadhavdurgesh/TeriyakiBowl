@@ -232,13 +232,12 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Container(
-                      // width: MediaQuery.of(context).size.width * 0.6,
-                      height: 180,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           color: lightColor),
                       padding: const EdgeInsets.all(16),
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           const Text(
                             "Teriyaki Bowl",
@@ -249,7 +248,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           ),
                           12.heightBox,
                           const Text(
-                            "Item has been added to your cart",
+                            "Item has been added to your cart.",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 14,
                             ),

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:teriyaki_bowl_app/resources/auth_methods.dart';
+import 'package:teriyaki_bowl_app/views/favourite_list_screen.dart';
 import 'package:teriyaki_bowl_app/views/home_screen.dart';
+import 'package:teriyaki_bowl_app/views/order_history_screen.dart';
+import 'package:teriyaki_bowl_app/views/rating_screen.dart';
+import 'package:teriyaki_bowl_app/views/setting_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../utils/colors.dart';
@@ -39,7 +44,9 @@ class _DrawerListState extends State<DrawerList> {
           ),
           const Divider(height: 8,),
           ListTile(
-            onTap: (){},
+            onTap: (){
+              Get.offAll(() => const OrderHistoryScreen());
+            },
             leading: const Icon(
               Icons.menu_book_outlined,
               color: primaryColor,
@@ -54,7 +61,9 @@ class _DrawerListState extends State<DrawerList> {
           ),
           const Divider(height: 8,),
           ListTile(
-            onTap: (){},
+            onTap: (){
+              Get.offAll(() => const FavouriteListScreen());
+              },
             leading: const Icon(
               Icons.favorite_border_outlined,
               color: primaryColor,
@@ -69,7 +78,9 @@ class _DrawerListState extends State<DrawerList> {
           ),
           const Divider(height: 8,),
           ListTile(
-            onTap: (){},
+            onTap: (){
+              Get.offAll(() => const RatingScreen());
+            },
             leading: const Icon(
               Icons.star_rate_outlined,
               color: primaryColor,
@@ -84,7 +95,9 @@ class _DrawerListState extends State<DrawerList> {
           ),
           const Divider(height: 8,),
           ListTile(
-            onTap: (){},
+            onTap: (){
+              Get.offAll(() => const SettingScreen());
+            },
             leading: const Icon(
               Icons.settings_outlined,
               color: primaryColor,
@@ -107,13 +120,12 @@ class _DrawerListState extends State<DrawerList> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Container(
-                    // width: MediaQuery.of(context).size.width * 0.6,
-                    height: 180,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         color: lightColor),
                     padding: const EdgeInsets.all(16),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         const Text(
                           "Teriyaki Bowl",
@@ -125,6 +137,7 @@ class _DrawerListState extends State<DrawerList> {
                         12.heightBox,
                         const Text(
                           "Are you sure to logout from this app?",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 14,
                           ),
@@ -135,7 +148,8 @@ class _DrawerListState extends State<DrawerList> {
                           children: [
                             CustomButton(
                               btnText: "Logout",
-                              onTap: () {
+                              onTap: () async {
+                                await AuthMethods().signOut();
                                 Get.offAll(() => const LoginScreen());
                               },
                             ),
