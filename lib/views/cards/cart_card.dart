@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:teriyaki_bowl_app/utils/colors.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../common/custom_button.dart';
+
 class CartCard extends StatefulWidget {
   const CartCard({super.key});
 
@@ -62,7 +64,61 @@ class _CartCardState extends State<CartCard> {
                             ),
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (ctx) => Dialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: lightColor),
+                                    padding: const EdgeInsets.all(16),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Text(
+                                          "Teriyaki Bowl",
+                                          style: TextStyle(
+                                            fontSize: 28,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        12.heightBox,
+                                        const Text(
+                                          "Are you sure delete cart item?",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        16.heightBox,
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            CustomButton(
+                                              btnText: "Yes",
+                                              onTap: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                            16.widthBox,
+                                            CustomButton(
+                                              btnText: "No",
+                                              onTap: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
                             icon: const Icon(
                               Icons.delete_outline,
                               color: primaryColor,

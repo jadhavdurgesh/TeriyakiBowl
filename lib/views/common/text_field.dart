@@ -5,22 +5,24 @@ import '../../utils/colors.dart';
 class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
+  final String hintText;
   final int maxLines;
   final Widget? suffixIcon;
   final bool isPass;
   final TextInputType keyboardType;
-  final bool readOnly;
-  final Color borderColor;
+  final Color textColor;
+  final FontWeight fontWeight;
 
   const CustomTextField({super.key,
     required this.controller,
     required this.labelText,
+    this.hintText = "",
     this.maxLines = 1,
     this.suffixIcon,
-    this.readOnly = false,
     this.isPass = false,
-    this.borderColor = darkColor,
-    this.keyboardType = TextInputType.text
+    this.textColor = textDarkColor,
+    this.keyboardType = TextInputType.text,
+    this.fontWeight = FontWeight.bold
   });
 
   @override
@@ -33,11 +35,18 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return TextField(
       controller: widget.controller,
+      keyboardType: widget.keyboardType,
+      obscureText: widget.isPass,
       decoration: InputDecoration(
           labelText: widget.labelText,
-          labelStyle: const TextStyle(
-            color: textDarkColor,
-            fontWeight: FontWeight.bold
+          hintText: widget.hintText,
+          labelStyle: TextStyle(
+            color: widget.textColor,
+            fontWeight: widget.fontWeight
+          ),
+          hintStyle: TextStyle(
+              color: widget.textColor,
+              fontWeight: widget.fontWeight
           ),
           suffixIcon: widget.suffixIcon,
           contentPadding: const EdgeInsets.all(12),

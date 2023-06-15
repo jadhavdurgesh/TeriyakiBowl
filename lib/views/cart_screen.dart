@@ -7,6 +7,7 @@ import 'package:teriyaki_bowl_app/views/home_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../utils/colors.dart';
+import 'order_summary_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -81,7 +82,7 @@ class _CartScreenState extends State<CartScreen> {
             child: CustomButton(
               btnText: "Checkout",
               onTap: () {
-
+                Get.to(() => const OrderSummaryScreen());
               },
             ),
           ),
