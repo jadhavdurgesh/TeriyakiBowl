@@ -90,9 +90,8 @@ class _ListViewContentState extends State<ListViewContent> {
         itemBuilder: (BuildContext context, index) {
           return GestureDetector(
             onTap: () {
-              Get.to(() => const ItemDetailScreen());
             },
-            child: const ListCard(),
+            child: Container(),
           );
         },
       ),

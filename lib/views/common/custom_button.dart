@@ -6,6 +6,9 @@ class CustomButton extends StatelessWidget {
   final Function()? onTap;
   final double paddingH;
   final double paddingV;
+  final bool isDisabled;
+  final Color backgroundColor;
+  final Color textColor;
 
   const CustomButton({
     Key? key,
@@ -13,16 +16,19 @@ class CustomButton extends StatelessWidget {
     required this.onTap,
     this.paddingH = 24,
     this.paddingV = 16,
+    this.isDisabled = false,
+    this.backgroundColor = primaryColor,
+    this.textColor = lightColor
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Material(
       borderRadius: BorderRadius.circular(8),
-      color: primaryColor,
+      color: isDisabled ? Colors.grey : backgroundColor,
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
-        onTap: onTap,
+        onTap: isDisabled ? (){} : onTap,
         child: Container(
           padding:
               EdgeInsets.symmetric(vertical: paddingV, horizontal: paddingH),
@@ -32,9 +38,9 @@ class CustomButton extends StatelessWidget {
             children: [
               Text(
                 btnText,
-                style: const TextStyle(
+                style: TextStyle(
                     fontSize: 14,
-                    color: Colors.white,
+                    color: textColor,
                     fontWeight: FontWeight.w600),
               ),
             ],

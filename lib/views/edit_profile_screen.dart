@@ -1,10 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:teriyaki_bowl_app/utils/utils.dart';
 import 'package:teriyaki_bowl_app/views/common/custom_button.dart';
 import 'package:teriyaki_bowl_app/views/common/text_field.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../models/user_model.dart';
+import '../providers/user_provider.dart';
 import '../utils/colors.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -15,6 +21,9 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+
+  var userData = {};
+
   TextEditingController emailController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
@@ -28,7 +37,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    try {
+      var snap = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
+      userData = snap.data()!;
+      setState(() {
+        emailController.text = userData["email"];
+        usernameController.text = userData["full_name"];
+        mobileController.text = userData["mobile"];
+      });
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -74,9 +104,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         Center(
                           child: Stack(
                             children: [
-                              const CircleAvatar(
-                                backgroundColor: Colors.grey,
+                              CircleAvatar(
                                 radius: 64,
+                                child: Image.asset("assets/user.png"),
                               ),
                               Positioned(
                                 bottom: 0,
@@ -100,7 +130,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         const Text(
                           "Email Address",
                           style:
-                              TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                         8.heightBox,
                         CustomTextField(
@@ -112,9 +142,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ),
                         16.heightBox,
                         const Text(
-                          "User Name",
+                          "Full Name",
                           style:
-                              TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                         8.heightBox,
                         CustomTextField(
@@ -128,7 +158,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         const Text(
                           "Mobile Number",
                           style:
-                              TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                         8.heightBox,
                         CustomTextField(
@@ -140,7 +170,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ),
                         24.heightBox
                       ],
-                    ),
+                    )
                   ),
                 ),
               ),
@@ -155,3 +185,79 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 }
+
+
+// Column(
+// mainAxisAlignment: MainAxisAlignment.center,
+// crossAxisAlignment: CrossAxisAlignment.start,
+// children: [
+// Center(
+// child: Stack(
+// children: [
+// CircleAvatar(
+// radius: 64,
+// child: Image.asset("assets/user.png"),
+// ),
+// Positioned(
+// bottom: 0,
+// right: 0,
+// child: CircleAvatar(
+// radius: 20,
+// backgroundColor: primaryColor,
+// child: IconButton(
+// onPressed: () {},
+// icon: const Icon(
+// Icons.camera_alt,
+// color: lightColor,
+// ),
+// ),
+// ),
+// ),
+// ],
+// ),
+// ),
+// 16.heightBox,
+// const Text(
+// "Email Address",
+// style:
+// TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+// ),
+// 8.heightBox,
+// CustomTextField(
+// controller: emailController,
+// labelText: "",
+// hintText: "Enter your email address",
+// textColor: darkColor,
+// fontWeight: FontWeight.normal,
+// ),
+// 16.heightBox,
+// const Text(
+// "Full Name",
+// style:
+// TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+// ),
+// 8.heightBox,
+// CustomTextField(
+// controller: usernameController,
+// labelText: "",
+// hintText: "Enter your username",
+// textColor: darkColor,
+// fontWeight: FontWeight.normal,
+// ),
+// 16.heightBox,
+// const Text(
+// "Mobile Number",
+// style:
+// TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+// ),
+// 8.heightBox,
+// CustomTextField(
+// controller: mobileController,
+// labelText: "",
+// hintText: "Enter your mobile number",
+// textColor: darkColor,
+// fontWeight: FontWeight.normal,
+// ),
+// 24.heightBox
+// ],
+// )

@@ -5,8 +5,9 @@ class Item {
   final String itemName;
   final String itemSubCategory;
   final double itemPrice;
-  final int prepTime;
+  final String prepTime;
   final String itemDescription;
+  final String itemImage;
   final int totalOrder;
 
   Item({
@@ -16,6 +17,7 @@ class Item {
     required this.itemPrice,
     required this.prepTime,
     required this.itemDescription,
+    required this.itemImage,
     required this.totalOrder,
   });
 
@@ -26,6 +28,7 @@ class Item {
     'item_price' : itemPrice,
     'prep_time' : prepTime,
     'item_description' : itemDescription,
+    'item_image': itemImage,
     'total_order' : totalOrder,
   };
 
@@ -39,6 +42,7 @@ class Item {
       itemPrice: snapshot['item_price'],
       prepTime: snapshot['prep_time'],
       itemDescription: snapshot['item_description'],
+      itemImage: snapshot['item_image'],
       totalOrder: snapshot['total_order'],
     );
   }

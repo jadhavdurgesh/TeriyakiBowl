@@ -23,9 +23,7 @@ class AuthMethods {
       required String password}) async {
     String res = "Some error occurred";
     try {
-      if (email.isNotEmpty ||
-          fullName.isNotEmpty ||
-          mobile.isNotEmpty) {
+      if (email.isNotEmpty || fullName.isNotEmpty || mobile.isNotEmpty) {
         // register user
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
@@ -42,9 +40,20 @@ class AuthMethods {
           address: [],
         );
 
-        await _firestore.collection('users').doc(cred.user!.uid).set(
-              user.toJson(),
-            );
+        await _firestore
+            .collection('users')
+            .doc(cred.user!.uid)
+            .set(user.toJson());
+
+        await _firestore
+            .collection('cart')
+            .doc(cred.user!.uid)
+            .set({"uid": cred.user!.uid, "items": [], "cart_amount": 0.00});
+
+        await _firestore
+            .collection('orders')
+            .doc(cred.user!.uid)
+            .set({"uid": cred.user!.uid, "orders": []});
 
         res = 'success';
       } else {
@@ -64,15 +73,15 @@ class AuthMethods {
   }) async {
     String res = 'Some error occurred';
     try {
-      if(email.isNotEmpty || password.isNotEmpty) {
-        await _auth.signInWithEmailAndPassword(email: email, password: password);
+      if (email.isNotEmpty || password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
 
         res = 'success';
       } else {
         res = 'Please enter all the fields';
       }
-    }
-    catch (err) {
+    } catch (err) {
       res = err.toString();
     }
     return res;

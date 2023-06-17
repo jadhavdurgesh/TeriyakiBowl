@@ -12,7 +12,6 @@ class CartCard extends StatefulWidget {
 }
 
 class _CartCardState extends State<CartCard> {
-  bool isFav = false;
 
   @override
   Widget build(BuildContext context) {

@@ -1,15 +1,45 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:teriyaki_bowl_app/utils/colors.dart';
+import 'package:velocity_x/velocity_x.dart';
+
+import '../../resources/firestore_methods.dart';
+import '../../utils/utils.dart';
 
 class GridCard extends StatefulWidget {
-  const GridCard({super.key});
+  final snap;
+  const GridCard({super.key, required this.snap,});
 
   @override
   State<GridCard> createState() => _GridCardState();
 }
 
 class _GridCardState extends State<GridCard> {
-  bool isFav = false;
+  var userData = {};
+  var favourite = [];
+  var isFav = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    try {
+      var snap = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
+      userData = snap.data()!;
+      setState(() {
+        favourite = userData["favourite"];
+        isFav = favourite.contains(widget.snap['iid']);
+      });
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +65,11 @@ class _GridCardState extends State<GridCard> {
                   borderRadius: BorderRadius.circular(8),
                   child: AspectRatio(
                     aspectRatio: 1 / 1,
-                    child: Image.asset(
-                      "assets/food_sample2.jpg",
+                    child: CachedNetworkImage(
+                      key: UniqueKey(),
+                      imageUrl: widget.snap['item_image'],
                       fit: BoxFit.cover,
+                      placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
                     ),
                   ),
                 ),
@@ -51,10 +83,13 @@ class _GridCardState extends State<GridCard> {
                         borderRadius: BorderRadius.circular(8),
                         color: primaryColor.withOpacity(0.4)),
                     child: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          isFav ? isFav = false : isFav = true;
-                        });
+                      onPressed: () async {
+                        await FirestoreMethods().makeFavourite(
+                          userData['uid'],
+                          widget.snap['iid'],
+                          favourite
+                        );
+                        getData();
                       },
                       icon: isFav
                           ? const Icon(
@@ -75,12 +110,12 @@ class _GridCardState extends State<GridCard> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         color: primaryColor),
-                    child: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 12),
                       child: Text(
-                        "\$20.6",
-                        style: TextStyle(
+                        "\$${widget.snap["item_price"]}",
+                        style: const TextStyle(
                             color: lightColor, fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -88,15 +123,29 @@ class _GridCardState extends State<GridCard> {
                 ),
               ],
             ),
-            const Expanded(
-              child: Padding(
-                padding: EdgeInsets.all(8),
-                child: Text(
-                  "Veggie Bowl",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            8.heightBox,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                "${widget.snap["item_name"]}".allWordsCapitilize(),
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
                 ),
               ),
-            )
+            ),
+            4.heightBox,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                "${widget.snap["item_sub_category"]}".allWordsCapitilize(),
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 12,
+                ),
+              ),
+            ),
           ],
         ),
       ),

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -8,9 +10,19 @@ import 'package:teriyaki_bowl_app/views/payment_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../utils/colors.dart';
+import '../utils/utils.dart';
+import 'coupon_screen.dart';
 
 class OrderSummaryScreen extends StatefulWidget {
-  const OrderSummaryScreen({super.key});
+  final snap;
+  final double tax;
+  final int totalOrder;
+
+  const OrderSummaryScreen(
+      {super.key,
+      required this.snap,
+      required this.tax,
+      required this.totalOrder});
 
   @override
   State<OrderSummaryScreen> createState() => _OrderSummaryScreenState();
@@ -18,6 +30,34 @@ class OrderSummaryScreen extends StatefulWidget {
 
 class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
   TextEditingController couponController = TextEditingController();
+
+  var couponData = {};
+  double totalAmount = 0.00;
+
+  double discount = 0.00;
+  String cid = "";
+  bool couponApplied = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    try {
+      var couponSnap = await FirebaseFirestore.instance
+          .collection('commons')
+          .doc('coupons')
+          .get();
+
+      couponData = couponSnap.data()!;
+
+      setState(() {});
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
+  }
 
   @override
   void dispose() {
@@ -88,37 +128,53 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                           ],
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Row(
-                            children: [
-                              const Expanded(
-                                child: Text(
-                                  "Veggie Bowl",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
+                          padding: const EdgeInsets.only(
+                              top: 16, right: 16, left: 16, bottom: 8),
+                          child: ListView.builder(
+                              itemCount: widget.snap['items'].length,
+                              shrinkWrap: true,
+                              physics: const BouncingScrollPhysics(
+                                  decelerationRate:
+                                      ScrollDecelerationRate.fast),
+                              itemBuilder: (BuildContext context, index) {
+                                var itemSnap =
+                                    widget.snap[widget.snap['items'][index]];
+
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          "${itemSnap['item_name']}"
+                                              .allWordsCapitilize(),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ),
+                                      8.widthBox,
+                                      Text(
+                                        "${itemSnap['quantity']} x \$${itemSnap['item_price'].toStringAsFixed(2)}",
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      8.widthBox,
+                                      Text(
+                                        "\$${itemSnap['total_price'].toStringAsFixed(2)}",
+                                        style: const TextStyle(
+                                          color: primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ),
-                              8.widthBox,
-                              const Text(
-                                "1 x \$20.60",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              8.widthBox,
-                              const Text(
-                                "\$20.60",
-                                style: TextStyle(
-                                  color: primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
+                                );
+                              }),
                         ),
                       ),
                       12.heightBox,
@@ -139,6 +195,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                           padding: const EdgeInsets.only(
                               top: 8, left: 16, bottom: 16),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
@@ -154,9 +211,12 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                                   8.widthBox,
                                   TextButton(
                                     onPressed: () {
+                                      Get.to(() => CouponScreen(
+                                            data: couponData,
+                                          ));
                                     },
                                     child: const Text(
-                                      "Select Promocode",
+                                      "Select Promo Code",
                                       style: TextStyle(
                                         color: primaryColor,
                                         fontWeight: FontWeight.bold,
@@ -179,15 +239,52 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                                       ),
                                     ),
                                     8.widthBox,
-                                    CustomButton(
-                                      btnText: "Apply",
-                                      paddingH: 16,
-                                      paddingV: 16,
-                                      onTap: () {},
-                                    ),
+                                    couponApplied
+                                        ? CustomButton(
+                                            btnText: "Apply",
+                                            isDisabled: true,
+                                            paddingH: 16,
+                                            paddingV: 16,
+                                            onTap: () {},
+                                          )
+                                        : CustomButton(
+                                            btnText: "Apply",
+                                            paddingH: 16,
+                                            paddingV: 16,
+                                            onTap: () {
+                                              if (couponData['code_list']
+                                                  .contains(
+                                                      couponController.text)) {
+                                                setState(() {
+                                                  discount = couponData[
+                                                          couponController
+                                                              .text]['discount']
+                                                      .toDouble();
+                                                  cid = couponController.text;
+                                                  couponApplied = true;
+                                                });
+                                              } else {
+                                                showSnackBar(
+                                                    "Wrong coupon code",
+                                                    context);
+                                              }
+                                            },
+                                          ),
                                   ],
                                 ),
                               ),
+                              couponApplied
+                                  ? const Padding(
+                                      padding: EdgeInsets.only(top: 8),
+                                      child: Text(
+                                        "Coupon Code Applied Successfully!",
+                                        style: TextStyle(
+                                          color: Colors.green,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  : Container()
                             ],
                           ),
                         ),
@@ -226,9 +323,9 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                                     ],
                                   ),
                                   12.heightBox,
-                                  const Row(
+                                  Row(
                                     children: [
-                                      Expanded(
+                                      const Expanded(
                                         child: Text(
                                           "Order Total",
                                           style: TextStyle(
@@ -237,62 +334,62 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                                         ),
                                       ),
                                       Text(
-                                        "\$20.60",
-                                        style: TextStyle(
+                                        "\$${widget.snap['cart_amount'].toStringAsFixed(2)}",
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ],
                                   ),
                                   8.heightBox,
-                                  const Row(
+                                  Row(
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          "Tax (10%)",
-                                          style: TextStyle(
+                                          "Tax (${widget.tax}%)",
+                                          style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                       ),
                                       Text(
-                                        "\$2.06",
-                                        style: TextStyle(
+                                        "\$${(widget.snap['cart_amount'] * (widget.tax / 100.00)).toStringAsFixed(2)}",
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ],
                                   ),
                                   8.heightBox,
-                                  const Row(
+                                  Row(
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          "Delivery Charge",
-                                          style: TextStyle(
+                                          "Discount ($discount%)",
+                                          style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                       ),
                                       Text(
-                                        "\$16.00",
-                                        style: TextStyle(
+                                        "\$${(widget.snap['cart_amount'] * (discount.toDouble() / 100.00)).toStringAsFixed(2)}",
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ],
-                                  ),
+                                  )
                                 ],
                               ),
                             ),
                             const Divider(
                               height: 1,
                             ),
-                            const Padding(
-                              padding: EdgeInsets.all(16),
+                            Padding(
+                              padding: const EdgeInsets.all(16),
                               child: Row(
                                 children: [
-                                  Expanded(
+                                  const Expanded(
                                     child: Text(
                                       "Total Amount",
                                       style: TextStyle(
@@ -302,8 +399,8 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                                     ),
                                   ),
                                   Text(
-                                    "\$38.66",
-                                    style: TextStyle(
+                                    "\$${(widget.snap['cart_amount'] + (widget.snap['cart_amount'] * (widget.tax / 100.00)) - (widget.snap['cart_amount'] * (discount.toDouble() / 100.00))).toStringAsFixed(2)}",
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
                                     ),
@@ -314,57 +411,6 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                           ],
                         ),
                       ),
-                      12.heightBox,
-                      Container(
-                        decoration: BoxDecoration(
-                          color: lightColor,
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.shade200,
-                              offset: const Offset(0, 1),
-                              blurRadius: 1,
-                              spreadRadius: 2,
-                            )
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            children: [
-                              const Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      "Delivery Address",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              8.heightBox,
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.location_on_outlined,
-                                    color: primaryColor,
-                                  ),
-                                  8.widthBox,
-                                  const Expanded(
-                                    child: Text(
-                                      "Delivery Address",
-                                      style: TextStyle(color: textDarkColor),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
                       16.heightBox,
                     ],
                   ),
@@ -373,7 +419,19 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
               CustomButton(
                 btnText: "Proceed to Payment",
                 onTap: () {
-                  Get.to(() => const PaymentScreen());
+                  setState(() {
+                    totalAmount = (widget.snap['cart_amount'] +
+                        (widget.snap['cart_amount'] * (widget.tax / 100.00)) -
+                        (widget.snap['cart_amount'] *
+                            (discount.toDouble() / 100.00)));
+                  });
+                  Get.to(() => PaymentScreen(
+                        totalAmount: totalAmount,
+                        totalOrder: widget.totalOrder,
+                        discount: discount,
+                        cid: cid,
+                        snap: widget.snap,
+                      ));
                 },
               ),
             ],

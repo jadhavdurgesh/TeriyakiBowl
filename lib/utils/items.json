@@ -1,0 +1,371 @@
+{
+  "1" : {
+    "iid": "1",
+    "item_name": "Green Dragon",
+    "item_sub_category": "Signature Rolls",
+    "item_price": 11.00,
+    "prep_time": "45",
+    "item_description": "BBQ eel, Cucumber, Top W. Avocado.\n8 Pieces",
+    "total_order": 0
+  },
+  "2" : {
+    "iid": "2",
+    "item_name": "Pink Panther",
+    "item_sub_category": "Signature Rolls",
+    "item_price": 11.00,
+    "prep_time": "45",
+    "item_description": "Fried Shrimp, Crab Meat, Avocado, Oshinko, Pink Nori.\n8 Pieces",
+    "total_order": 0
+  },
+  "3" : {
+    "iid": "3",
+    "item_name": "Shrimp Lover",
+    "item_sub_category": "Signature Rolls",
+    "item_price": 11.00,
+    "prep_time": "45",
+    "item_description": "Fried Shrimp, Cream Cheese, Top W. Shrimp & Avocado.\n8 Pieces",
+    "total_order": 0
+  },
+  "4" : {
+    "iid": "4",
+    "item_name": "Angry Dragon",
+    "item_sub_category": "Signature Rolls",
+    "item_price": 11.00,
+    "prep_time": "45",
+    "item_description": "Fried Shrimp, Avocado, TopW. Crab Meat.\n8 Pieces",
+    "total_order": 0
+  },
+  "5" : {
+    "iid": "5",
+    "item_name": "Tempura California",
+    "item_sub_category": "Signature Rolls",
+    "item_price": 11.00,
+    "prep_time": "45",
+    "item_description": "Crab Meat, Cream Cheese, Avocado (Fried).\n8 Pieces",
+    "total_order": 0
+  },
+  "6" : {
+    "iid": "6",
+    "item_name": "Dynamite",
+    "item_sub_category": "Signature Rolls",
+    "item_price": 11.00,
+    "prep_time": "45",
+    "item_description": "Fresh Salmon, Crab Meat, Avocado (Fried).\n8 Pieces",
+    "total_order": 0
+  },
+  "7" : {
+    "iid": "7",
+    "item_name": "Rock and Roll",
+    "item_sub_category": "Signature Rolls",
+    "item_price": 11.00,
+    "prep_time": "45",
+    "item_description": "Spicy Salmon, Crunchy Flake, Top W. Avocado.\n8 Pieces",
+    "total_order": 0
+  },
+  "8" : {
+    "iid": "8",
+    "item_name": "Dancing Eel",
+    "item_sub_category": "Signature Rolls",
+    "item_price": 11.00,
+    "prep_time": "45",
+    "item_description": "California Roll, Top W. Eel & Avocado.\n8 Pieces",
+    "total_order": 0
+  },
+  "9" : {
+    "iid": "9",
+    "item_name": "Chicken Teriyaki Roll",
+    "item_sub_category": "Sushi Rolls",
+    "item_price": 5.99,
+    "prep_time": "45",
+    "item_description": "Chicken & Avocado.\n8 Pieces",
+    "total_order": 0
+  },
+  "10" : {
+    "iid": "10",
+    "item_name": "California Roll",
+    "item_sub_category": "Sushi Rolls",
+    "item_price": 5.99,
+    "prep_time": "45",
+    "item_description": "Crab Meat & Avocado.\n8 Pieces",
+    "total_order": 0
+  },
+  "11" : {
+    "iid": "11",
+    "item_name": "Shrimp Tempura",
+    "item_sub_category": "Sushi Rolls",
+    "item_price": 6.49,
+    "prep_time": "45",
+    "item_description": "Fried Shrimp and Avocado.\n8 Pieces",
+    "total_order": 0
+  },
+  "12" : {
+    "iid": "12",
+    "item_name": "Spicy Salmon",
+    "item_sub_category": "Sushi Rolls",
+    "item_price": 6.49,
+    "prep_time": "45",
+    "item_description": "Fried Spicy Salmon, Crunchy Flake.\n8 Pieces",
+    "total_order": 0
+  },
+  "13" : {
+    "iid": "13",
+    "item_name": "Salmon Avocado",
+    "item_sub_category": "Sushi Rolls",
+    "item_price": 6.49,
+    "prep_time": "45",
+    "item_description": "FRESH SALMON & AVOCADO.\n8 Pieces",
+    "total_order": 0
+  },
+  "14" : {
+    "iid": "14",
+    "item_name": "EEL ROLL",
+    "item_sub_category": "Sushi Rolls",
+    "item_price": 6.49,
+    "prep_time": "45",
+    "item_description": "BBQ EEL WITH AVOCADO.\n8 Pieces",
+    "total_order": 0
+  },
+  "15" : {
+    "iid": "15",
+    "item_name": "Oshinko Roll",
+    "item_sub_category": "Sushi Rolls",
+    "item_price": 5.99,
+    "prep_time": "45",
+    "item_description": "Japanese Pickle.\n8 Pieces",
+    "total_order": 0
+  },
+  "16" : {
+    "iid": "16",
+    "item_name": "AVOCADO & CUCUMBER ROLL",
+    "item_sub_category": "Sushi Rolls",
+    "item_price": 5.99,
+    "prep_time": "45",
+    "item_description": "8 Pieces",
+    "total_order": 0
+  },
+  "17" : {
+    "iid": "17",
+    "item_name": "FRIED DUMPLING",
+    "item_sub_category": "SIDES & SALAD",
+    "item_price": 5.00,
+    "prep_time": "45",
+    "item_description": "6 Pieces",
+    "total_order": 0
+  },
+  "18" : {
+    "iid": "18",
+    "item_name": "TEMPURA SHRIMP",
+    "item_sub_category": "SIDES & SALAD",
+    "item_price": 5.00,
+    "prep_time": "45",
+    "item_description": "3 Pieces",
+    "total_order": 0
+  },
+  "19" : {
+    "iid": "19",
+    "item_name": "VEGETABLE SPRING ROLL",
+    "item_sub_category": "SIDES & SALAD",
+    "item_price": 2.79,
+    "prep_time": "45",
+    "item_description": "2 Pieces",
+    "total_order": 0
+  },
+  "20" : {
+    "iid": "20",
+    "item_name": "SHUMAI",
+    "item_sub_category": "SIDES & SALAD",
+    "item_price": 5.00,
+    "prep_time": "45",
+    "item_description": "6 Pieces",
+    "total_order": 0
+  },
+  "21" : {
+    "iid": "21",
+    "item_name": "SEAWEED SALAD",
+    "item_sub_category": "SIDES & SALAD",
+    "item_price": 5.00,
+    "prep_time": "45",
+    "item_description": "",
+    "total_order": 0
+  },
+  "22" : {
+    "iid": "22",
+    "item_name": "AVOCADO SALAD",
+    "item_sub_category": "SIDES & SALAD",
+    "item_price": 5.00,
+    "prep_time": "45",
+    "item_description": "",
+    "total_order": 0
+  },
+  "23" : {
+    "iid": "23",
+    "item_name": "SODA",
+    "item_sub_category": "BEVERAGES",
+    "item_price": 1.59,
+    "prep_time": "45",
+    "item_description": "",
+    "total_order": 0
+  },
+  "24" : {
+    "iid": "24",
+    "item_name": "LEMONADE",
+    "item_sub_category": "BEVERAGES",
+    "item_price": 2.39,
+    "prep_time": "45",
+    "item_description": "",
+    "total_order": 0
+  },
+  "25" : {
+    "iid": "25",
+    "item_name": "BOTTLE WATER",
+    "item_sub_category": "BEVERAGES",
+    "item_price": 1.59,
+    "prep_time": "45",
+    "item_description": "",
+    "total_order": 0
+  },
+  "26" : {
+    "iid": "26",
+    "item_name": "CHICKEN",
+    "item_sub_category": "TERIYAKI",
+    "item_price": 8.89,
+    "prep_time": "45",
+    "item_description": "SERVED W. VEGETABLE & STEAMED RICE OR FRIED RICE\nSUBSTITUTE FOR NOODLE $1.00",
+    "total_order": 0
+  },
+  "27" : {
+    "iid": "27",
+    "item_name": "BEEF",
+    "item_sub_category": "TERIYAKI",
+    "item_price": 9.29,
+    "prep_time": "45",
+    "item_description": "SERVED W. VEGETABLE & STEAMED RICE OR FRIED RICE\nSUBSTITUTE FOR NOODLE $1.00",
+    "total_order": 0
+  },
+  "28" : {
+    "iid": "28",
+    "item_name": "SHRIMP",
+    "item_sub_category": "TERIYAKI",
+    "item_price": 9.29,
+    "prep_time": "45",
+    "item_description": "SERVED W. VEGETABLE & STEAMED RICE OR FRIED RICE\nSUBSTITUTE FOR NOODLE $1.00",
+    "total_order": 0
+  },
+  "29" : {
+    "iid": "29",
+    "item_name": "SALMON",
+    "item_sub_category": "TERIYAKI",
+    "item_price": 10.29,
+    "prep_time": "45",
+    "item_description": "SERVED W. VEGETABLE & STEAMED RICE OR FRIED RICE\nSUBSTITUTE FOR NOODLE $1.00",
+    "total_order": 0
+  },
+  "30" : {
+    "iid": "30",
+    "item_name": "CHICKEN & BEEF",
+    "item_sub_category": "TERIYAKI",
+    "item_price": 10.39,
+    "prep_time": "45",
+    "item_description": "SERVED W. VEGETABLE & STEAMED RICE OR FRIED RICE\nSUBSTITUTE FOR NOODLE $1.00",
+    "total_order": 0
+  },
+  "31" : {
+    "iid": "31",
+    "item_name": "CHICKEN & SHRIMP",
+    "item_sub_category": "TERIYAKI",
+    "item_price": 10.39,
+    "prep_time": "45",
+    "item_description": "SERVED W. VEGETABLE & STEAMED RICE OR FRIED RICE\nSUBSTITUTE FOR NOODLE $1.00",
+    "total_order": 0
+  },
+  "32" : {
+    "iid": "32",
+    "item_name": "BEEF & SHRIMP",
+    "item_sub_category": "TERIYAKI",
+    "item_price": 10.89,
+    "prep_time": "45",
+    "item_description": "SERVED W. VEGETABLE & STEAMED RICE OR FRIED RICE\nSUBSTITUTE FOR NOODLE $1.00",
+    "total_order": 0
+  },
+  "33" : {
+    "iid": "33",
+    "item_name": "SALMON & SHRIMP",
+    "item_sub_category": "TERIYAKI",
+    "item_price": 12.39,
+    "prep_time": "45",
+    "item_description": "SERVED W. VEGETABLE & STEAMED RICE OR FRIED RICE\nSUBSTITUTE FOR NOODLE $1.00",
+    "total_order": 0
+  },
+  "34" : {
+    "iid": "34",
+    "item_name": "CHICKEN",
+    "item_sub_category": "BENTO",
+    "item_price": 10.39,
+    "prep_time": "45",
+    "item_description": "SERVED W. STEAMED RICE OR FRIED RICE, GARDEN SALAD, 3PCS DUMPLING & 2 VEG SPRING ROLL\nSUBSTITUTE FOR NOODLE $1.00",
+    "total_order": 0
+  },
+  "35" : {
+    "iid": "35",
+    "item_name": "BEEF",
+    "item_sub_category": "BENTO",
+    "item_price": 11.19,
+    "prep_time": "45",
+    "item_description": "SERVED W. STEAMED RICE OR FRIED RICE, GARDEN SALAD, 3PCS DUMPLING & 2 VEG SPRING ROLL\nSUBSTITUTE FOR NOODLE $1.00",
+    "total_order": 0
+  },
+  "36" : {
+    "iid": "36",
+    "item_name": "SHRIMP",
+    "item_sub_category": "BENTO",
+    "item_price": 11.19,
+    "prep_time": "45",
+    "item_description": "SERVED W. STEAMED RICE OR FRIED RICE, GARDEN SALAD, 3PCS DUMPLING & 2 VEG SPRING ROLL\nSUBSTITUTE FOR NOODLE $1.00",
+    "total_order": 0
+  },
+  "37" : {
+    "iid": "37",
+    "item_name": "SALMON",
+    "item_sub_category": "BENTO",
+    "item_price": 11.79,
+    "prep_time": "45",
+    "item_description": "SERVED W. STEAMED RICE OR FRIED RICE, GARDEN SALAD, 3PCS DUMPLING & 2 VEG SPRING ROLL\nSUBSTITUTE FOR NOODLE $1.00",
+    "total_order": 0
+  },
+  "38" : {
+    "iid": "38",
+    "item_name": "CHICKEN & BEEF",
+    "item_sub_category": "BENTO",
+    "item_price": 11.99,
+    "prep_time": "45",
+    "item_description": "SERVED W. STEAMED RICE OR FRIED RICE, GARDEN SALAD, 3PCS DUMPLING & 2 VEG SPRING ROLL\nSUBSTITUTE FOR NOODLE $1.00",
+    "total_order": 0
+  },
+  "39" : {
+    "iid": "39",
+    "item_name": "CHICKEN & SHRIMP",
+    "item_sub_category": "BENTO",
+    "item_price": 11.99,
+    "prep_time": "45",
+    "item_description": "SERVED W. STEAMED RICE OR FRIED RICE, GARDEN SALAD, 3PCS DUMPLING & 2 VEG SPRING ROLL\nSUBSTITUTE FOR NOODLE $1.00",
+    "total_order": 0
+  },
+  "40" : {
+    "iid": "40",
+    "item_name": "BEEF & SHRIMP",
+    "item_sub_category": "BENTO",
+    "item_price": 12.49,
+    "prep_time": "45",
+    "item_description": "SERVED W. STEAMED RICE OR FRIED RICE, GARDEN SALAD, 3PCS DUMPLING & 2 VEG SPRING ROLL\nSUBSTITUTE FOR NOODLE $1.00",
+    "total_order": 0
+  },
+  "41" : {
+    "iid": "41",
+    "item_name": "SALMON & SHRIMP",
+    "item_sub_category": "BENTO",
+    "item_price": 13.49,
+    "prep_time": "45",
+    "item_description": "SERVED W. STEAMED RICE OR FRIED RICE, GARDEN SALAD, 3PCS DUMPLING & 2 VEG SPRING ROLL\nSUBSTITUTE FOR NOODLE $1.00",
+    "total_order": 0
+  }
+}

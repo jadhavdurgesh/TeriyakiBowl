@@ -78,8 +78,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       8.heightBox,
                       CustomTextField(
                         controller: oldPasswordController,
-                        labelText: "",
-                        hintText: "Enter your old password",
+                        labelText: "Enter your old password",
+                        isPass: true,
                       ),
                       16.heightBox,
                       const Text(
@@ -90,8 +90,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       8.heightBox,
                       CustomTextField(
                         controller: newPasswordController,
-                        labelText: "",
-                        hintText: "Enter your new password",
+                        labelText: "Enter your new password",
+                        isPass: true,
                       ),
                       16.heightBox,
                       const Text(
@@ -102,8 +102,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       8.heightBox,
                       CustomTextField(
                         controller: confirmPasswordController,
-                        labelText: "",
-                        hintText: "Enter your confirm password",
+                        labelText: "Enter your confirm password",
+                        isPass: true,
                       ),
                       24.heightBox
                     ],

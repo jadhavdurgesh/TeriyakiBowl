@@ -1,24 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:teriyaki_bowl_app/resources/firestore_methods.dart';
 import 'package:teriyaki_bowl_app/views/cards/cart_card.dart';
 import 'package:teriyaki_bowl_app/views/common/custom_button.dart';
 import 'package:teriyaki_bowl_app/views/home_screen.dart';
+import 'package:teriyaki_bowl_app/views/order_placed_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
-
+import 'package:intl/intl.dart';
 import '../utils/colors.dart';
 import 'order_summary_screen.dart';
 
 class PaymentScreen extends StatefulWidget {
-  const PaymentScreen({super.key});
+  final double totalAmount;
+  final int totalOrder;
+  final double discount;
+  final String cid;
+  final snap;
+
+  const PaymentScreen({
+    super.key,
+    required this.totalAmount,
+    required this.totalOrder,
+    required this.discount,
+    required this.cid,
+    required this.snap,
+  });
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-
   bool isCod = true;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -91,22 +106,21 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           children: [
                             Expanded(
                               child: GestureDetector(
-                                onTap: (){
-                                  setState(() {
-                                    isCod == false? isCod = true: isCod = true;
-                                  });
-                                },
+                                onTap: () {},
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: isCod? primaryColor: Colors.transparent,
+                                    color: isCod
+                                        ? primaryColor
+                                        : Colors.transparent,
                                     borderRadius: BorderRadius.circular(8),
                                   ),
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 12),
                                   child: Center(
                                     child: Text(
                                       "COD",
                                       style: TextStyle(
-                                        color: isCod? lightColor: darkColor,
+                                        color: isCod ? lightColor : darkColor,
                                         fontSize: 14,
                                       ),
                                     ),
@@ -117,25 +131,38 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             8.widthBox,
                             Expanded(
                               child: GestureDetector(
-                                onTap: (){
-                                  setState(() {
-                                    isCod == true? isCod = false: isCod = false;
-                                  });
-                                },
+                                onTap: () {},
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: isCod? Colors.transparent: primaryColor,
+                                    color: isCod
+                                        ? Colors.transparent
+                                        : primaryColor,
                                     borderRadius: BorderRadius.circular(8),
                                   ),
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 12),
                                   child: Center(
-                                    child: Text(
-                                      "ONLINE PAY",
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        color: isCod ? darkColor: lightColor,
-                                        fontSize: 14,
-                                      ),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "ONLINE PAY",
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            color:
+                                                isCod ? darkColor : lightColor,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        Text(
+                                          "NOT AVAILABLE",
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            color:
+                                                isCod ? darkColor : lightColor,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -149,20 +176,61 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ],
               ),
             ),
-            12.heightBox,
-            const Expanded(
-              child: Column(
-                children: [Text("Nothing to show")],
+            28.heightBox,
+            Expanded(
+              child: Text(
+                "Total Payable Amount: \$${widget.totalAmount.toStringAsFixed(2)}",
+                textAlign: TextAlign.center,
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
             12.heightBox,
-            CustomButton(
-              btnText: "Pay Now",
-              onTap: () {},
+            isLoading? const Center(child: CircularProgressIndicator(color: primaryColor,),): CustomButton(
+              btnText: "Complete Order",
+              onTap: () async {
+
+                setState(() {
+                  isLoading = true;
+                });
+
+                DateTime now = DateTime.now();
+                String formattedDate = DateFormat('dd/MM/yy kk:mm:ss').format(now);
+
+                String oid = "${widget.totalOrder+1}";
+
+                await FirestoreMethods().saveOrder(
+                  oid: oid,
+                  orderStatus: 0,
+                  paymentCompleted: false,
+                  isCOD: true,
+                  orderTotal: widget.totalAmount,
+                  discount: widget.discount,
+                  couponCode: widget.cid,
+                  cart: widget.snap.data(),
+                  orderTime: formattedDate,
+                  context: context,
+                );
+
+                await resetCartFunction();
+
+                await FirestoreMethods().updateOrder(totalOrder: (widget.totalOrder+1));
+
+                setState(() {
+                  isLoading = false;
+                });
+
+                Get.close(3);
+                Get.to(() => const OrderPlacedScreen());
+              },
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> resetCartFunction() async {
+    await FirestoreMethods().resetCart(context: context);
   }
 }
