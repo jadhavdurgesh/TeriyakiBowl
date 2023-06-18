@@ -30,6 +30,17 @@ class _HomeScreenState extends State<HomeScreen> {
   String name = "";
   bool isGrid = true;
 
+  final List<String> categories = [
+    'TERIYAKI',
+    'BENTO',
+    'Signature Rolls',
+    'Sushi Rolls',
+    'SIDES & SALAD',
+    'BEVERAGES',
+  ];
+
+  int selectedCategory = 0;
+
   @override
   void initState() {
     super.initState();
@@ -164,31 +175,430 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
+            12.heightBox,
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Row(
+                  children: [
+                    12.widthBox,
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          selectedCategory = 0;
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: lightColor,
+                          borderRadius: BorderRadius.circular(8),
+                          border: selectedCategory == 0 ? Border.all(color: primaryColor, width: 2) : null,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade200,
+                              offset: const Offset(0, 1),
+                              blurRadius: 1,
+                              spreadRadius: 2,
+                            )
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(12),
+                        child: const Text("All Items"),
+                      ),
+                    ),
+                    12.widthBox,
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          selectedCategory = 1;
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: lightColor,
+                          border: selectedCategory == 1 ? Border.all(color: primaryColor, width: 2) : null,
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade200,
+                              offset: const Offset(0, 1),
+                              blurRadius: 1,
+                              spreadRadius: 2,
+                            )
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(12),
+                        child: const Text("Teriyaki"),
+                      ),
+                    ),
+                    8.widthBox,
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          selectedCategory = 2;
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: lightColor,
+                          border: selectedCategory == 2 ? Border.all(color: primaryColor, width: 2) : null,
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade200,
+                              offset: const Offset(0, 1),
+                              blurRadius: 1,
+                              spreadRadius: 2,
+                            )
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(12),
+                        child: const Text("Bento"),
+                      ),
+                    ),
+                    12.widthBox,
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          selectedCategory = 3;
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: lightColor,
+                          border: selectedCategory == 3 ? Border.all(color: primaryColor, width: 2) : null,
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade200,
+                              offset: const Offset(0, 1),
+                              blurRadius: 1,
+                              spreadRadius: 2,
+                            )
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(12),
+                        child: const Text("Signature Rolls"),
+                      ),
+                    ),
+                    12.widthBox,
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          selectedCategory = 4;
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: lightColor,
+                          border: selectedCategory == 4 ? Border.all(color: primaryColor, width: 2) : null,
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade200,
+                              offset: const Offset(0, 1),
+                              blurRadius: 1,
+                              spreadRadius: 2,
+                            )
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(12),
+                        child: const Text("Sushi Rolls"),
+                      ),
+                    ),
+                    12.widthBox,
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          selectedCategory = 5;
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: lightColor,
+                          border: selectedCategory == 5 ? Border.all(color: primaryColor, width: 2) : null,
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade200,
+                              offset: const Offset(0, 1),
+                              blurRadius: 1,
+                              spreadRadius: 2,
+                            )
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(12),
+                        child: const Text("Sides & Salads"),
+                      ),
+                    ),
+                    12.widthBox,
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          selectedCategory = 6;
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: lightColor,
+                          border: selectedCategory == 6 ? Border.all(color: primaryColor, width: 2) : null,
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade200,
+                              offset: const Offset(0, 1),
+                              blurRadius: 1,
+                              spreadRadius: 2,
+                            )
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(12),
+                        child: const Text("Beverages"),
+                      ),
+                    ),
+                    12.widthBox,
+                  ],
+                ),
+              ),
+            ),
             // tabs
             12.heightBox,
-            StreamBuilder(
-              stream:
+            Builder(builder: (BuildContext context){
+              if(selectedCategory == 0){
+                return StreamBuilder(
+                  stream:
                   FirebaseFirestore.instance.collection('items').snapshots(),
-              builder: (context,
-                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: primaryColor,
-                    ),
-                  );
-                }
-                return isGrid
-                    ? GridViewContent(
-                        snapshot: snapshot,
-                  cartData: cartData,
-                      )
-                    : ListViewContent(
-                        snapshot: snapshot,
-                  cartData: cartData,
+                  builder: (context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
                       );
-              },
-            ),
+                    }
+
+                    return isGrid
+                        ? GridViewContent(
+                      snapshot: snapshot,
+                      cartData: cartData,
+                    )
+                        : ListViewContent(
+                      snapshot: snapshot,
+                      cartData: cartData,
+                    );
+                  },
+                );
+              }
+              if(selectedCategory == 1){
+                return StreamBuilder(
+                  stream:
+                  FirebaseFirestore.instance.collection('items').where('item_sub_category', isEqualTo: 'TERIYAKI').snapshots(),
+                  builder: (context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
+                      );
+                    }
+
+                    return isGrid
+                        ? GridViewContent(
+                      snapshot: snapshot,
+                      cartData: cartData,
+                    )
+                        : ListViewContent(
+                      snapshot: snapshot,
+                      cartData: cartData,
+                    );
+                  },
+                );
+              }
+              if(selectedCategory == 2){
+                return StreamBuilder(
+                  stream:
+                  FirebaseFirestore.instance.collection('items').where('item_sub_category', isEqualTo: 'BENTO').snapshots(),
+                  builder: (context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
+                      );
+                    }
+
+                    return isGrid
+                        ? GridViewContent(
+                      snapshot: snapshot,
+                      cartData: cartData,
+                    )
+                        : ListViewContent(
+                      snapshot: snapshot,
+                      cartData: cartData,
+                    );
+                  },
+                );
+              }
+              if(selectedCategory == 3){
+                return StreamBuilder(
+                  stream:
+                  FirebaseFirestore.instance.collection('items').where('item_sub_category', isEqualTo: 'Signature Rolls').snapshots(),
+                  builder: (context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
+                      );
+                    }
+
+                    return isGrid
+                        ? GridViewContent(
+                      snapshot: snapshot,
+                      cartData: cartData,
+                    )
+                        : ListViewContent(
+                      snapshot: snapshot,
+                      cartData: cartData,
+                    );
+                  },
+                );
+              }
+              if(selectedCategory == 4){
+                return StreamBuilder(
+                  stream:
+                  FirebaseFirestore.instance.collection('items').where('item_sub_category', isEqualTo: 'Sushi Rolls').snapshots(),
+                  builder: (context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
+                      );
+                    }
+
+                    return isGrid
+                        ? GridViewContent(
+                      snapshot: snapshot,
+                      cartData: cartData,
+                    )
+                        : ListViewContent(
+                      snapshot: snapshot,
+                      cartData: cartData,
+                    );
+                  },
+                );
+              }
+              if(selectedCategory == 5){
+                return StreamBuilder(
+                  stream:
+                  FirebaseFirestore.instance.collection('items').where('item_sub_category', isEqualTo: 'SIDES & SALAD').snapshots(),
+                  builder: (context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
+                      );
+                    }
+
+                    return isGrid
+                        ? GridViewContent(
+                      snapshot: snapshot,
+                      cartData: cartData,
+                    )
+                        : ListViewContent(
+                      snapshot: snapshot,
+                      cartData: cartData,
+                    );
+                  },
+                );
+              }
+              if(selectedCategory == 6){
+                return StreamBuilder(
+                  stream:
+                  FirebaseFirestore.instance.collection('items').where('item_sub_category', isEqualTo: 'BEVERAGES').snapshots(),
+                  builder: (context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
+                      );
+                    }
+
+                    return isGrid
+                        ? GridViewContent(
+                      snapshot: snapshot,
+                      cartData: cartData,
+                    )
+                        : ListViewContent(
+                      snapshot: snapshot,
+                      cartData: cartData,
+                    );
+                  },
+                );
+              }
+
+              return StreamBuilder(
+                stream:
+                FirebaseFirestore.instance.collection('items').snapshots(),
+                builder: (context,
+                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: primaryColor,
+                      ),
+                    );
+                  }
+
+                  if(selectedCategory == 0){
+
+                    return isGrid
+                        ? GridViewContent(
+                      snapshot: snapshot,
+                      cartData: cartData,
+                    )
+                        : ListViewContent(
+                      snapshot: snapshot,
+                      cartData: cartData,
+                    );
+
+                  } if(selectedCategory == 1){
+                    return isGrid
+                        ? GridViewContent(
+                      snapshot: snapshot,
+                      cartData: cartData,
+                    )
+                        : ListViewContent(
+                      snapshot: snapshot,
+                      cartData: cartData,
+                    );
+                  }
+
+
+                  return isGrid
+                      ? GridViewContent(
+                    snapshot: snapshot,
+                    cartData: cartData,
+                  )
+                      : ListViewContent(
+                    snapshot: snapshot,
+                    cartData: cartData,
+                  );
+                },
+              );
+
+            }),
             // List: GridView or ListView
           ],
         ),
@@ -201,7 +611,8 @@ class GridViewContent extends StatefulWidget {
   final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot;
   final cartData;
 
-  const GridViewContent({super.key, required this.snapshot, required this.cartData});
+  const GridViewContent(
+      {super.key, required this.snapshot, required this.cartData});
 
   @override
   State<GridViewContent> createState() => _GridViewContentState();
@@ -226,7 +637,8 @@ class _GridViewContentState extends State<GridViewContent> {
           var snap = widget.snapshot.data!.docs[index].data();
           return GestureDetector(
             onTap: () {
-              Get.to(() => ItemDetailScreen(
+              Get.to(() =>
+                  ItemDetailScreen(
                     snap: snap,
                   ));
             },
@@ -242,7 +654,8 @@ class ListViewContent extends StatefulWidget {
   final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot;
   final cartData;
 
-  const ListViewContent({super.key, required this.snapshot, required this.cartData});
+  const ListViewContent(
+      {super.key, required this.snapshot, required this.cartData});
 
   @override
   State<ListViewContent> createState() => _ListViewContentState();
@@ -261,7 +674,8 @@ class _ListViewContentState extends State<ListViewContent> {
         itemBuilder: (BuildContext context, index) {
           return GestureDetector(
             onTap: () {
-              Get.to(() => ItemDetailScreen(
+              Get.to(() =>
+                  ItemDetailScreen(
                     snap: widget.snapshot.data!.docs[index].data(),
                   ));
             },
