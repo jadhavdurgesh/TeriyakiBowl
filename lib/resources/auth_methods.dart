@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:teriyaki_bowl_app/models/user_model.dart' as model;
 
+import '../utils/utils.dart';
+
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -33,6 +35,7 @@ class AuthMethods {
           uid: cred.user!.uid,
           email: email,
           fullName: fullName,
+          password: password,
           mobile: mobile,
           favourite: [],
           ratings: [],
@@ -50,10 +53,12 @@ class AuthMethods {
             .doc(cred.user!.uid)
             .set({"uid": cred.user!.uid, "items": [], "cart_amount": 0.00});
 
-        await _firestore
-            .collection('orders')
-            .doc(cred.user!.uid)
-            .set({"uid": cred.user!.uid, "orders": []});
+        await _firestore.collection('orders').doc(cred.user!.uid).set({
+          "uid": cred.user!.uid,
+          "orders": [],
+          "unreviewed": [],
+          "reviews": []
+        });
 
         res = 'success';
       } else {
@@ -85,6 +90,25 @@ class AuthMethods {
       res = err.toString();
     }
     return res;
+  }
+
+  // Updating user-email or password
+  Future<void> updateUserInfo({
+    required String fullName,
+    required String mobile,
+    required context,
+  }) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .set({
+        'full_name': fullName,
+        'mobile': mobile,
+      }, SetOptions(merge: true));
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
   }
 
   // signing out the user

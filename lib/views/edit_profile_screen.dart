@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:teriyaki_bowl_app/resources/auth_methods.dart';
 import 'package:teriyaki_bowl_app/utils/utils.dart';
 import 'package:teriyaki_bowl_app/views/common/custom_button.dart';
 import 'package:teriyaki_bowl_app/views/common/text_field.dart';
@@ -21,8 +22,9 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-
   var userData = {};
+
+  bool isLoading = false;
 
   TextEditingController emailController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
@@ -44,7 +46,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   getData() async {
     try {
-      var snap = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
+      var snap = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
       userData = snap.data()!;
       setState(() {
         emailController.text = userData["email"];
@@ -58,7 +63,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -97,86 +101,103 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               Expanded(
                 child: Center(
                   child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(
-                          child: Stack(
-                            children: [
-                              CircleAvatar(
-                                radius: 64,
-                                child: Image.asset("assets/user.png"),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: CircleAvatar(
-                                  radius: 20,
-                                  backgroundColor: primaryColor,
-                                  child: IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(
-                                      Icons.camera_alt,
-                                      color: lightColor,
-                                    ),
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Stack(
+                          children: [
+                            CircleAvatar(
+                              radius: 64,
+                              child: Image.asset("assets/user.png"),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: CircleAvatar(
+                                radius: 20,
+                                backgroundColor: primaryColor,
+                                child: IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.camera_alt,
+                                    color: lightColor,
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                        16.heightBox,
-                        const Text(
-                          "Email Address",
-                          style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                        8.heightBox,
-                        CustomTextField(
-                          controller: emailController,
-                          labelText: "",
-                          hintText: "Enter your email address",
-                          textColor: darkColor,
-                          fontWeight: FontWeight.normal,
-                        ),
-                        16.heightBox,
-                        const Text(
-                          "Full Name",
-                          style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                        8.heightBox,
-                        CustomTextField(
-                          controller: usernameController,
-                          labelText: "",
-                          hintText: "Enter your username",
-                          textColor: darkColor,
-                          fontWeight: FontWeight.normal,
-                        ),
-                        16.heightBox,
-                        const Text(
-                          "Mobile Number",
-                          style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                        8.heightBox,
-                        CustomTextField(
-                          controller: mobileController,
-                          labelText: "",
-                          hintText: "Enter your mobile number",
-                          textColor: darkColor,
-                          fontWeight: FontWeight.normal,
-                        ),
-                        24.heightBox
-                      ],
-                    )
-                  ),
+                      ),
+                      16.heightBox,
+                      const Text(
+                        "Email Address (cannot be changed)",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      8.heightBox,
+                      CustomTextField(
+                        controller: emailController,
+                        labelText: "",
+                        isDisabled: true,
+                        hintText: "Enter your email address",
+                        textColor: darkColor,
+                        fontWeight: FontWeight.normal,
+                      ),
+                      16.heightBox,
+                      const Text(
+                        "Full Name",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      8.heightBox,
+                      CustomTextField(
+                        controller: usernameController,
+                        labelText: "",
+                        hintText: "Enter your username",
+                        textColor: darkColor,
+                        fontWeight: FontWeight.normal,
+                      ),
+                      16.heightBox,
+                      const Text(
+                        "Mobile Number",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      8.heightBox,
+                      CustomTextField(
+                        controller: mobileController,
+                        labelText: "",
+                        hintText: "Enter your mobile number",
+                        textColor: darkColor,
+                        fontWeight: FontWeight.normal,
+                      ),
+                      24.heightBox
+                    ],
+                  )),
                 ),
               ),
-              CustomButton(
+              isLoading ? const Center(child: CircularProgressIndicator(color: primaryColor,),): CustomButton(
                 btnText: "Update",
-                onTap: () {},
+                onTap: () async {
+
+                  setState(() {
+                    isLoading = true;
+                  });
+
+                  await AuthMethods().updateUserInfo(
+                    fullName: usernameController.text,
+                    mobile: mobileController.text,
+                    context: context,
+                  );
+
+                  showingSnackBar();
+
+                  setState(() {
+                    isLoading = false;
+                  });
+                },
               ),
             ],
           ),
@@ -184,80 +205,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
     );
   }
+
+  void showingSnackBar() {
+    showSnackBar("Profile Updated Successfully!", context);
+  }
 }
-
-
-// Column(
-// mainAxisAlignment: MainAxisAlignment.center,
-// crossAxisAlignment: CrossAxisAlignment.start,
-// children: [
-// Center(
-// child: Stack(
-// children: [
-// CircleAvatar(
-// radius: 64,
-// child: Image.asset("assets/user.png"),
-// ),
-// Positioned(
-// bottom: 0,
-// right: 0,
-// child: CircleAvatar(
-// radius: 20,
-// backgroundColor: primaryColor,
-// child: IconButton(
-// onPressed: () {},
-// icon: const Icon(
-// Icons.camera_alt,
-// color: lightColor,
-// ),
-// ),
-// ),
-// ),
-// ],
-// ),
-// ),
-// 16.heightBox,
-// const Text(
-// "Email Address",
-// style:
-// TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-// ),
-// 8.heightBox,
-// CustomTextField(
-// controller: emailController,
-// labelText: "",
-// hintText: "Enter your email address",
-// textColor: darkColor,
-// fontWeight: FontWeight.normal,
-// ),
-// 16.heightBox,
-// const Text(
-// "Full Name",
-// style:
-// TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-// ),
-// 8.heightBox,
-// CustomTextField(
-// controller: usernameController,
-// labelText: "",
-// hintText: "Enter your username",
-// textColor: darkColor,
-// fontWeight: FontWeight.normal,
-// ),
-// 16.heightBox,
-// const Text(
-// "Mobile Number",
-// style:
-// TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-// ),
-// 8.heightBox,
-// CustomTextField(
-// controller: mobileController,
-// labelText: "",
-// hintText: "Enter your mobile number",
-// textColor: darkColor,
-// fontWeight: FontWeight.normal,
-// ),
-// 24.heightBox
-// ],
-// )

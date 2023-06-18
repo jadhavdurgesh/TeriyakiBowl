@@ -11,6 +11,7 @@ class CustomTextField extends StatefulWidget {
   final bool isPass;
   final TextInputType keyboardType;
   final Color textColor;
+  final bool isDisabled;
   final FontWeight fontWeight;
 
   const CustomTextField({super.key,
@@ -22,6 +23,7 @@ class CustomTextField extends StatefulWidget {
     this.isPass = false,
     this.textColor = textDarkColor,
     this.keyboardType = TextInputType.text,
+    this.isDisabled = false,
     this.fontWeight = FontWeight.bold
   });
 
@@ -36,6 +38,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return TextField(
       controller: widget.controller,
       keyboardType: widget.keyboardType,
+      readOnly: widget.isDisabled,
       obscureText: widget.isPass,
       decoration: InputDecoration(
           labelText: widget.labelText,

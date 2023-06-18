@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:teriyaki_bowl_app/utils/colors.dart';
+import 'package:velocity_x/velocity_x.dart';
 import 'dart:async';
 import 'home_screen.dart';
 import 'login_screen.dart';
@@ -55,9 +56,15 @@ class _SplashScreenState extends State<SplashScreen> {
               const CircularProgressIndicator(
                 color: darkColor,
               ),
-              const SizedBox(
-                height: 24,
-              )
+              24.heightBox,
+              const Text(
+                "Powered by MITS",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+              24.heightBox
             ],
           ),
         ),

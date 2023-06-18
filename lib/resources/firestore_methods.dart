@@ -20,33 +20,57 @@ class FirestoreMethods {
       }
     } catch (e) {}
   }
-  
-  Future<void> updateOrder ({required int totalOrder}) async {
-    try{
-      await _firestore.collection('commons').doc('orders').update({
-        'totalOrder': totalOrder
-      });
-    }catch(e){}
+
+  Future<void> updateOrder({required int totalOrder}) async {
+    try {
+      await _firestore
+          .collection('commons')
+          .doc('orders')
+          .update({'totalOrder': totalOrder});
+    } catch (e) {}
   }
 
-  Future<void> saveOrder({
+  Future<void> saveReview({
     required String oid,
-    required int orderStatus,
-    required bool paymentCompleted,
-    required bool isCOD,
-    required double orderTotal,
-    required double discount,
-    required String? couponCode,
-    required cart,
-    required String orderTime,
-    required context
-}) async {
+    required String? description,
+    required double rating,
+    required String reviewTime,
+    required context,
+  }) async {
+    try {
+      await _firestore.collection('orders').doc(curUser).set({
+        'reviews': FieldValue.arrayUnion([
+          {
+            'oid': oid,
+            'description': description,
+            'rating': rating,
+            'time': reviewTime
+          }
+        ]),
+        'unreviewed': FieldValue.arrayRemove([oid])
+      }, SetOptions(merge: true));
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
+  }
 
+  Future<void> saveOrder(
+      {required String oid,
+      required int orderStatus,
+      required bool paymentCompleted,
+      required bool isCOD,
+      required double orderTotal,
+      required double discount,
+      required String? couponCode,
+      required cart,
+      required String orderTime,
+      required context}) async {
     try {
       await _firestore.collection('orders').doc(curUser).set({
         'uid': curUser,
         'orders': FieldValue.arrayUnion([oid]),
-        oid : {
+        'unreviewed': FieldValue.arrayUnion([oid]),
+        oid: {
           'oid': oid,
           'order_status': orderStatus,
           'payment_completed': paymentCompleted,
@@ -58,11 +82,9 @@ class FirestoreMethods {
           'order_time': orderTime,
         }
       }, SetOptions(merge: true));
-
     } catch (e) {
       showSnackBar(e.toString(), context);
     }
-
   }
 
   Future<void> resetCart({required context}) async {
@@ -76,7 +98,6 @@ class FirestoreMethods {
       showSnackBar(e.toString(), context);
     }
   }
-
 
   Future<void> addToCart(
       {required String iid,
