@@ -111,6 +111,52 @@ class AuthMethods {
     }
   }
 
+  // Changing Password
+  Future<void> changeAuthPassword({email, password, newPassword, context}) async {
+    User currentUser = _auth.currentUser!;
+    final cred = EmailAuthProvider.credential(email: email, password: password);
+
+    try {
+      await currentUser.reauthenticateWithCredential(cred).then((value) {
+        currentUser.updatePassword(newPassword);
+      }).then((value) async {
+
+        await AuthMethods().updatePassword(newPassword: newPassword, context: context);
+
+        showSnackBar("Password updated", context);
+
+      });
+    } catch (e) {
+        showSnackBar(e.toString(), context);
+    }
+
+  }
+
+  Future<void> updatePassword({
+    required String newPassword,
+    required context,
+  }) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .set({
+        'password': newPassword
+      }, SetOptions(merge: true));
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
+  }
+
+  // PasswordReset
+  Future<void> passwordReset(String email, context) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
+  }
+
   // signing out the user
   Future<void> signOut() async {
     await _auth.signOut();

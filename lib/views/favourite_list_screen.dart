@@ -24,6 +24,7 @@ class _FavouriteListScreenState extends State<FavouriteListScreen> {
   var userData = {};
   var cartData = {};
   var favourite = [];
+  String name = "";
 
   @override
   void initState() {
@@ -47,6 +48,7 @@ class _FavouriteListScreenState extends State<FavouriteListScreen> {
 
       userData = snap.data()!;
       setState(() {
+        name = userData['full_name'];
         favourite = userData["favourite"];
       });
     } catch (e) {
@@ -57,14 +59,14 @@ class _FavouriteListScreenState extends State<FavouriteListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const SafeArea(
+      drawer: SafeArea(
         child: Drawer(
-          shape: RoundedRectangleBorder(),
+          shape: const RoundedRectangleBorder(),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                HeaderDrawer(),
-                DrawerList(),
+                HeaderDrawer(name: name,),
+                const DrawerList(),
               ],
             ),
           ),

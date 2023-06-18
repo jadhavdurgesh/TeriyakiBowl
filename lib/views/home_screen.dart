@@ -27,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var cartData = {};
   var totalCart = 0;
   var favourite = [];
+  String name = "";
   bool isGrid = true;
 
   @override
@@ -50,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
       cartData = cartSnap.data()!;
       userData = snap.data()!;
       setState(() {
+        name = userData["full_name"];
         favourite = userData["favourite"];
         totalCart = cartData['items'].length;
       });
@@ -61,14 +63,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const SafeArea(
+      drawer: SafeArea(
         child: Drawer(
-          shape: RoundedRectangleBorder(),
+          shape: const RoundedRectangleBorder(),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                HeaderDrawer(),
-                DrawerList(),
+                HeaderDrawer(name: name),
+                const DrawerList(),
               ],
             ),
           ),

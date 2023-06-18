@@ -47,7 +47,7 @@ class _OrderCardState extends State<OrderCard> {
                   ),
                 ),
                 8.widthBox,
-                Text("\$${(widget.orderSnap['cart']['cart_amount']).toStringAsFixed(2)}",
+                Text("\$${(widget.orderSnap['order_total']).toStringAsFixed(2)}",
                   style: const TextStyle(
                       color: primaryColor,
                       fontSize: 16,

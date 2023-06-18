@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="teriyaki_bowl_app"
+        android:label="Teriyaki Bowl"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

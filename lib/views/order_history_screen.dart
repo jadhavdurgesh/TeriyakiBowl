@@ -10,6 +10,7 @@ import 'package:teriyaki_bowl_app/views/drawer/drawer_list.dart';
 import 'package:teriyaki_bowl_app/views/item_detail_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../utils/utils.dart';
 import 'cards/order_card.dart';
 import 'drawer/drawer_header.dart';
 
@@ -21,17 +22,44 @@ class OrderHistoryScreen extends StatefulWidget {
 }
 
 class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
+
+  var userData = {};
+  String name = "";
+
+  getData() async {
+    try {
+      var snap = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      userData = snap.data()!;
+      setState(() {
+        name = userData["full_name"];
+      });
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const SafeArea(
+      drawer: SafeArea(
         child: Drawer(
-          shape: RoundedRectangleBorder(),
+          shape: const RoundedRectangleBorder(),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                HeaderDrawer(),
-                DrawerList(),
+                HeaderDrawer(name: name,),
+                const DrawerList(),
               ],
             ),
           ),

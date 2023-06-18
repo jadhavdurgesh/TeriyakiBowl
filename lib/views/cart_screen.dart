@@ -45,7 +45,7 @@ class _CartScreenState extends State<CartScreen> {
 
       setState(() {
         tax = commonSnap['tax'].toDouble();
-        totalOrders = orderData['totalOrders'];
+        totalOrders = orderData['totalOrder'];
       });
     } catch (e) {
       showSnackBar(e.toString(), context);

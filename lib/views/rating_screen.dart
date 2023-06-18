@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:teriyaki_bowl_app/views/drawer/drawer_list.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import '../utils/utils.dart';
 import 'cards/review_card.dart';
 import 'common/custom_button.dart';
 import 'drawer/drawer_header.dart';
@@ -25,17 +26,42 @@ class _RatingScreenState extends State<RatingScreen> {
   double rating = 1.0;
   bool isLoading = false;
 
+  var userData = {};
+  String name = "";
+
+  getData() async {
+    try {
+      var snap = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      userData = snap.data()!;
+      setState(() {
+        name = userData["full_name"];
+      });
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const SafeArea(
+      drawer: SafeArea(
         child: Drawer(
-          shape: RoundedRectangleBorder(),
+          shape: const RoundedRectangleBorder(),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                HeaderDrawer(),
-                DrawerList(),
+                HeaderDrawer(name: name,),
+                const DrawerList(),
               ],
             ),
           ),
