@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -10,6 +12,7 @@ import 'package:teriyaki_bowl_app/views/item_detail_screen.dart';
 import 'package:teriyaki_bowl_app/views/search_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../utils/utils.dart';
 import 'drawer/drawer_header.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,19 +23,54 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  var userData = {};
+  var cartData = {};
+  var totalCart = 0;
+  var favourite = [];
+  String name = "";
   bool isGrid = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    try {
+      var snap = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      var cartSnap = await FirebaseFirestore.instance
+          .collection('cart')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      cartData = cartSnap.data()!;
+      userData = snap.data()!;
+      setState(() {
+        name = userData["full_name"];
+        favourite = userData["favourite"];
+        totalCart = cartData['items'].length;
+      });
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const SafeArea(
+      drawer: SafeArea(
         child: Drawer(
-          shape: RoundedRectangleBorder(),
+          shape: const RoundedRectangleBorder(),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                HeaderDrawer(),
-                DrawerList(),
+                HeaderDrawer(name: name),
+                const DrawerList(),
               ],
             ),
           ),
@@ -62,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.only(right: 8),
             child: IconButton(
               onPressed: () {
-                Get.to(() => const SearchScreen());
+                Get.to(() => SearchScreen(cartData: cartData,));
               },
               icon: const Icon(
                 Icons.search,
@@ -73,15 +111,27 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 8),
-            child: IconButton(
-              onPressed: () {
-                Get.to(() => const CartScreen());
-              },
-              icon: const Icon(
-                Icons.shopping_cart,
-                size: 32,
-                color: primaryColor,
-              ),
+            child: Stack(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Get.to(() => const CartScreen());
+                  },
+                  icon: const Icon(
+                    Icons.shopping_cart,
+                    size: 32,
+                    color: primaryColor,
+                  ),
+                ),
+                const Positioned(
+                  top: 4,
+                  right: 4,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.red,
+                    radius: 4,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -114,11 +164,32 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            12.heightBox,
             // tabs
             12.heightBox,
+            StreamBuilder(
+              stream:
+                  FirebaseFirestore.instance.collection('items').snapshots(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: primaryColor,
+                    ),
+                  );
+                }
+                return isGrid
+                    ? GridViewContent(
+                        snapshot: snapshot,
+                  cartData: cartData,
+                      )
+                    : ListViewContent(
+                        snapshot: snapshot,
+                  cartData: cartData,
+                      );
+              },
+            ),
             // List: GridView or ListView
-            isGrid ? const GridViewContent() : const ListViewContent(),
           ],
         ),
       ),
@@ -127,7 +198,10 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class GridViewContent extends StatefulWidget {
-  const GridViewContent({super.key});
+  final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot;
+  final cartData;
+
+  const GridViewContent({super.key, required this.snapshot, required this.cartData});
 
   @override
   State<GridViewContent> createState() => _GridViewContentState();
@@ -139,19 +213,24 @@ class _GridViewContentState extends State<GridViewContent> {
     return Expanded(
       child: GridView.builder(
         shrinkWrap: true,
+        physics: const BouncingScrollPhysics(
+            decelerationRate: ScrollDecelerationRate.fast),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 12,
-            childAspectRatio: 2 / 2.54,
+            childAspectRatio: 2 / 2.7,
             mainAxisSpacing: 12),
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        itemCount: 8,
+        padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12, top: 8),
+        itemCount: widget.snapshot.data!.docs.length,
         itemBuilder: (BuildContext context, index) {
+          var snap = widget.snapshot.data!.docs[index].data();
           return GestureDetector(
             onTap: () {
-              Get.to(() => const ItemDetailScreen());
+              Get.to(() => ItemDetailScreen(
+                    snap: snap,
+                  ));
             },
-            child: const GridCard(),
+            child: GridCard(snap: snap),
           );
         },
       ),
@@ -160,7 +239,10 @@ class _GridViewContentState extends State<GridViewContent> {
 }
 
 class ListViewContent extends StatefulWidget {
-  const ListViewContent({super.key});
+  final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot;
+  final cartData;
+
+  const ListViewContent({super.key, required this.snapshot, required this.cartData});
 
   @override
   State<ListViewContent> createState() => _ListViewContentState();
@@ -171,15 +253,21 @@ class _ListViewContentState extends State<ListViewContent> {
   Widget build(BuildContext context) {
     return Expanded(
       child: ListView.builder(
-        itemCount: 8,
+        itemCount: widget.snapshot.data!.docs.length,
         shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        physics: const BouncingScrollPhysics(
+            decelerationRate: ScrollDecelerationRate.fast),
+        padding: const EdgeInsets.only(left: 12, right: 12, top: 8),
         itemBuilder: (BuildContext context, index) {
           return GestureDetector(
             onTap: () {
-              Get.to(() => const ItemDetailScreen());
+              Get.to(() => ItemDetailScreen(
+                    snap: widget.snapshot.data!.docs[index].data(),
+                  ));
             },
-            child: const ListCard(),
+            child: ListCard(
+              snap: widget.snapshot.data!.docs[index].data(),
+            ),
           );
         },
       ),

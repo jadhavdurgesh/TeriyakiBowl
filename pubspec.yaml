@@ -36,6 +36,9 @@ dependencies:
   image_picker: ^0.8.8
   uuid: ^3.0.7
   provider: ^6.0.5
+  cached_network_image: ^3.2.3
+  lottie: ^2.4.0
+  flutter_rating_bar: ^4.0.1
 
   firebase_auth: ^4.6.3
   firebase_core: ^2.14.0
@@ -73,6 +76,7 @@ flutter:
     - assets/logov1.png
     - assets/user.png
     - assets/food_sample2.jpg
+    - assets/lottiesuccess.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:

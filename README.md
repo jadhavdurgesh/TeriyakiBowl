@@ -20,3 +20,5 @@ Colors:
 2. Secondary Color: ##ffffff
 3. Background Color: #faf9fe
 4. Text Color: #b9b8bc
+
+FirebaseAuth.instance.currentUser!.uid

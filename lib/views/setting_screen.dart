@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -6,6 +8,7 @@ import 'package:teriyaki_bowl_app/views/change_password_screen.dart';
 import 'package:teriyaki_bowl_app/views/drawer/drawer_list.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../utils/utils.dart';
 import 'drawer/drawer_header.dart';
 import 'edit_profile_screen.dart';
 
@@ -17,17 +20,44 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
+
+  var userData = {};
+  String name = "";
+
+  getData() async {
+    try {
+      var snap = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      userData = snap.data()!;
+      setState(() {
+        name = userData["full_name"];
+      });
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const SafeArea(
+      drawer: SafeArea(
         child: Drawer(
-          shape: RoundedRectangleBorder(),
+          shape: const RoundedRectangleBorder(),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                HeaderDrawer(),
-                DrawerList(),
+                HeaderDrawer(name: name,),
+                const DrawerList(),
               ],
             ),
           ),

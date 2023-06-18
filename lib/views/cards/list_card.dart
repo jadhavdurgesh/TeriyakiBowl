@@ -1,15 +1,45 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:teriyaki_bowl_app/utils/colors.dart';
+import 'package:velocity_x/velocity_x.dart';
+
+import '../../resources/firestore_methods.dart';
+import '../../utils/utils.dart';
 
 class ListCard extends StatefulWidget {
-  const ListCard({super.key});
+  final snap;
+  const ListCard({super.key, required this.snap});
 
   @override
   State<ListCard> createState() => _ListCardState();
 }
 
 class _ListCardState extends State<ListCard> {
-  bool isFav = false;
+  var userData = {};
+  var favourite = [];
+  var isFav = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    try {
+      var snap = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
+      userData = snap.data()!;
+      setState(() {
+        favourite = userData["favourite"];
+        isFav = favourite.contains(widget.snap['iid']);
+      });
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +67,11 @@ class _ListCardState extends State<ListCard> {
                     borderRadius: BorderRadius.circular(8),
                     child: AspectRatio(
                       aspectRatio: 16 / 9,
-                      child: Image.asset(
-                        "assets/food_sample2.jpg",
+                      child: CachedNetworkImage(
+                        key: UniqueKey(),
+                        imageUrl: widget.snap['item_image'],
                         fit: BoxFit.cover,
+                        placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
                       ),
                     ),
                   ),
@@ -53,10 +85,13 @@ class _ListCardState extends State<ListCard> {
                           borderRadius: BorderRadius.circular(8),
                           color: primaryColor.withOpacity(0.4)),
                       child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            isFav ? isFav = false : isFav = true;
-                          });
+                        onPressed: () async {
+                          await FirestoreMethods().makeFavourite(
+                              userData['uid'],
+                              widget.snap['iid'],
+                              favourite
+                          );
+                          getData();
                         },
                         icon: isFav
                             ? const Icon(
@@ -72,22 +107,35 @@ class _ListCardState extends State<ListCard> {
                   ),
                 ],
               ),
-              const Padding(
-                padding: EdgeInsets.all(8),
+              Padding(
+                padding: const EdgeInsets.all(8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: Text(
-                        "Veggie Bowl",
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${widget.snap["item_name"]}".allWordsCapitilize(),
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16,),
+                          ),
+                          4.heightBox,
+                          Text(
+                            "${widget.snap["item_sub_category"]}".allWordsCapitilize(),
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     Text(
-                      "\$20.6",
-                      style: TextStyle(
+                      "\$${widget.snap["item_price"]}",
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: primaryColor,
                         fontSize: 16,

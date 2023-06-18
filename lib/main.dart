@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:teriyaki_bowl_app/providers/user_provider.dart';
+import 'package:teriyaki_bowl_app/resources/firestore_methods.dart';
 import 'package:teriyaki_bowl_app/utils/colors.dart';
 import 'package:teriyaki_bowl_app/views/home_screen.dart';
 import 'package:teriyaki_bowl_app/views/login_screen.dart';

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -8,6 +10,8 @@ import 'package:teriyaki_bowl_app/views/drawer/drawer_list.dart';
 import 'package:teriyaki_bowl_app/views/item_detail_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../utils/utils.dart';
+import 'cards/order_card.dart';
 import 'drawer/drawer_header.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
@@ -18,17 +22,44 @@ class OrderHistoryScreen extends StatefulWidget {
 }
 
 class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
+
+  var userData = {};
+  String name = "";
+
+  getData() async {
+    try {
+      var snap = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      userData = snap.data()!;
+      setState(() {
+        name = userData["full_name"];
+      });
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const SafeArea(
+      drawer: SafeArea(
         child: Drawer(
-          shape: RoundedRectangleBorder(),
+          shape: const RoundedRectangleBorder(),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                HeaderDrawer(),
-                DrawerList(),
+                HeaderDrawer(name: name,),
+                const DrawerList(),
               ],
             ),
           ),
@@ -63,36 +94,43 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
           ),
         ),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [Container()],
-        ),
-      ),
-    );
-  }
-}
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('orders')
+            .where("uid", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            .snapshots(),
+        builder: (context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: primaryColor,
+              ),
+            );
+          }
 
-class ListViewContent extends StatefulWidget {
-  const ListViewContent({super.key});
+          var orderLength = snapshot.data!.docs[0]["orders"].length;
 
-  @override
-  State<ListViewContent> createState() => _ListViewContentState();
-}
+          return Column(
+            children: [
+              Expanded(
+                child: orderLength != 0
+                    ? ListView.builder(
+                        itemCount: orderLength,
+                        padding:
+                            const EdgeInsets.all(12),
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, index) {
+                          var snap = snapshot.data!.docs[0];
 
-class _ListViewContentState extends State<ListViewContent> {
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: 8,
-        shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        itemBuilder: (BuildContext context, index) {
-          return GestureDetector(
-            onTap: () {
-              Get.to(() => const ItemDetailScreen());
-            },
-            child: const ListCard(),
+                          var orderSnap = snap[snap['orders'][index]];
+
+                          return OrderCard(orderSnap: orderSnap,);
+                        },
+                      )
+                    : const Center(child: Text("Order Something!")),
+              ),
+            ],
           );
         },
       ),

@@ -6,6 +6,7 @@ class User {
   final String email;
   final String fullName;
   final String mobile;
+  final String password;
   final List favourite;
   final List ratings;
   final List orders;
@@ -16,6 +17,7 @@ class User {
     required this.email,
     required this.fullName,
     required this.mobile,
+    required this.password,
     required this.favourite,
     required this.ratings,
     required this.orders,
@@ -27,6 +29,7 @@ class User {
     'email' : email,
     'full_name' : fullName,
     'mobile' : mobile,
+    'password' : password,
     'favourite' : favourite,
     'ratings' : ratings,
     'orders' : orders,
@@ -41,6 +44,7 @@ class User {
       email: snapshot['email'],
       fullName: snapshot['fullName'],
       mobile: snapshot['mobile'],
+      password: snapshot['password'],
       favourite: snapshot['favourite'],
       ratings: snapshot['ratings'],
       orders: snapshot['orders'],

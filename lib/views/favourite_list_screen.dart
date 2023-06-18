@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -8,6 +10,7 @@ import 'package:teriyaki_bowl_app/views/drawer/drawer_list.dart';
 import 'package:teriyaki_bowl_app/views/item_detail_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../utils/utils.dart';
 import 'drawer/drawer_header.dart';
 
 class FavouriteListScreen extends StatefulWidget {
@@ -18,17 +21,52 @@ class FavouriteListScreen extends StatefulWidget {
 }
 
 class _FavouriteListScreenState extends State<FavouriteListScreen> {
+  var userData = {};
+  var cartData = {};
+  var favourite = [];
+  String name = "";
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    try {
+      var snap = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      var cartSnap = await FirebaseFirestore.instance
+          .collection('cart')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      cartData = cartSnap.data()!;
+
+      userData = snap.data()!;
+      setState(() {
+        name = userData['full_name'];
+        favourite = userData["favourite"];
+      });
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const SafeArea(
+      drawer: SafeArea(
         child: Drawer(
-          shape: RoundedRectangleBorder(),
+          shape: const RoundedRectangleBorder(),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                HeaderDrawer(),
-                DrawerList(),
+                HeaderDrawer(name: name,),
+                const DrawerList(),
               ],
             ),
           ),
@@ -64,16 +102,37 @@ class _FavouriteListScreenState extends State<FavouriteListScreen> {
         ),
       ),
       body: SafeArea(
-        child: Column(
-          children: [Container()],
+        child: StreamBuilder(
+          stream:
+          FirebaseFirestore.instance.collection('items').snapshots(),
+          builder: (context,
+              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: primaryColor,
+                ),
+              );
+            }
+            return ListViewContent(
+              snapshot: snapshot,
+              favourite: favourite,
+              cartData: cartData,
+            );
+          },
         ),
       ),
     );
   }
 }
 
+
 class ListViewContent extends StatefulWidget {
-  const ListViewContent({super.key});
+  final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot;
+  final List favourite;
+  final cartData;
+
+  const ListViewContent({super.key, required this.snapshot, required this.favourite, required this.cartData});
 
   @override
   State<ListViewContent> createState() => _ListViewContentState();
@@ -82,20 +141,24 @@ class ListViewContent extends StatefulWidget {
 class _ListViewContentState extends State<ListViewContent> {
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: 8,
-        shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        itemBuilder: (BuildContext context, index) {
-          return GestureDetector(
-            onTap: () {
-              Get.to(() => const ItemDetailScreen());
-            },
-            child: const ListCard(),
-          );
-        },
-      ),
+    return ListView.builder(
+      itemCount: widget.snapshot.data!.docs.length,
+      shrinkWrap: true,
+      physics: const BouncingScrollPhysics(
+          decelerationRate: ScrollDecelerationRate.fast),
+      padding: const EdgeInsets.only(left: 12, right: 12, top: 8),
+      itemBuilder: (BuildContext context, index) {
+        return widget.favourite.contains(widget.snapshot.data!.docs[index].data()['iid']) ? GestureDetector(
+          onTap: () {
+            Get.to(() => ItemDetailScreen(
+              snap: widget.snapshot.data!.docs[index].data(),
+            ));
+          },
+          child: ListCard(
+            snap: widget.snapshot.data!.docs[index].data(),
+          ),
+        ) : Container();
+      },
     );
   }
 }
