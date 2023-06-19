@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +18,17 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: primaryColor));
 
-  await Firebase.initializeApp();
+  if(Platform.isIOS) {
+    await Firebase.initializeApp(
+        options: const FirebaseOptions(
+            apiKey: "AIzaSyAp9DagDoqJizMVNbQdfod8kGpaI3CUT58",
+            appId: "1:247486566264:ios:f5590dac7204b7ab06028d",
+            messagingSenderId: "247486566264",
+            projectId: "teriyaki-bowl-app"));
+  }
+  else{
+    await Firebase.initializeApp();
+  }
 
   runApp(const MyApp());
 }
@@ -26,7 +38,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -34,15 +45,14 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: GetMaterialApp(
-        title: 'Teriyaki Bowl App',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          scaffoldBackgroundColor: backgroundColor,
-          colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
-          useMaterial3: true,
-        ),
-        home: const SplashScreen()
-      ),
+          title: 'Teriyaki Bowl App',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            scaffoldBackgroundColor: backgroundColor,
+            colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
+            useMaterial3: true,
+          ),
+          home: const SplashScreen()),
     );
   }
 }

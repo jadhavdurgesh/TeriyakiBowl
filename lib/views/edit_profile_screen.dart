@@ -107,28 +107,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Center(
-                        child: Stack(
-                          children: [
-                            CircleAvatar(
-                              radius: 64,
-                              child: Image.asset("assets/user.png"),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: CircleAvatar(
-                                radius: 20,
-                                backgroundColor: primaryColor,
-                                child: IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.camera_alt,
-                                    color: lightColor,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                        child: CircleAvatar(
+                          radius: 64,
+                          child: Image.asset("assets/user.png"),
                         ),
                       ),
                       16.heightBox,

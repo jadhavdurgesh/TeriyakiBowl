@@ -19,14 +19,24 @@ class _SplashScreenState extends State<SplashScreen> {
 
   // change screen
   changeScreen() {
+
+    var count = 1;
+
     var authState = FirebaseAuth.instance.authStateChanges();
 
     Future.delayed(const Duration(seconds: 2), () {
       authState.listen((User? user) async {
         if(user == null && mounted){
           Get.offAll(() => const LoginScreen());
+          count++;
         } else {
-          Get.offAll(() => const HomeScreen());
+
+          if(count == 1){
+            Get.offAll(() => const HomeScreen());
+          } else {
+            Get.offAll(() => const LoginScreen());
+          }
+          
         }
       });
     });
