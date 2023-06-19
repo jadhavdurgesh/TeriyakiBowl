@@ -28,7 +28,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   @override
   void initState() {
     super.initState();
-    getData();
+    Future.delayed(Duration.zero, () {
+      getData();
+    });
   }
 
   getData() async {
@@ -43,7 +45,6 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       setState(() {
       });
     } catch (e) {
-      showSnackBar(e.toString(), context);
     }
   }
 

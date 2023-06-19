@@ -38,14 +38,15 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
         name = userData["full_name"];
       });
     } catch (e) {
-      showSnackBar(e.toString(), context);
     }
   }
 
   @override
   void initState() {
     super.initState();
-    getData();
+    Future.delayed(Duration.zero, () {
+      getData();
+    });
   }
 
 

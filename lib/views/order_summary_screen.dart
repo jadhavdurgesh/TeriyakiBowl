@@ -41,7 +41,9 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
   @override
   void initState() {
     super.initState();
-    getData();
+    Future.delayed(Duration.zero, () {
+      getData();
+    });
   }
 
   getData() async {
@@ -55,7 +57,6 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
 
       setState(() {});
     } catch (e) {
-      showSnackBar(e.toString(), context);
     }
   }
 

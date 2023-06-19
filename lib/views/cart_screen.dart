@@ -48,7 +48,6 @@ class _CartScreenState extends State<CartScreen> {
         totalOrders = orderData['totalOrder'];
       });
     } catch (e) {
-      showSnackBar(e.toString(), context);
     }
   }
 

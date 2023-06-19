@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:teriyaki_bowl_app/models/user_model.dart' as model;
+import 'package:teriyaki_bowl_app/views/splash_screen.dart';
 
 import '../utils/utils.dart';
+import '../views/login_screen.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -158,7 +161,11 @@ class AuthMethods {
   }
 
   // signing out the user
-  Future<void> signOut() async {
-    await _auth.signOut();
+  Future<void> signOut(context) async {
+    await _auth.signOut().then((value) {
+      Get.offAll(() => const LoginScreen());
+    }).onError((error, stackTrace) {
+      showSnackBar(error.toString(), context);
+    });
   }
 }

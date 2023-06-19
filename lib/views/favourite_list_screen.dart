@@ -29,7 +29,9 @@ class _FavouriteListScreenState extends State<FavouriteListScreen> {
   @override
   void initState() {
     super.initState();
-    getData();
+    Future.delayed(Duration.zero, () {
+      getData();
+    });
   }
 
   getData() async {
@@ -52,7 +54,6 @@ class _FavouriteListScreenState extends State<FavouriteListScreen> {
         favourite = userData["favourite"];
       });
     } catch (e) {
-      showSnackBar(e.toString(), context);
     }
   }
 
