@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:teriyaki_bowl_app/views/common/custom_button.dart';
 import 'package:teriyaki_bowl_app/views/common/text_field.dart';
 import 'package:teriyaki_bowl_app/views/forgot_password_screen.dart';
 import 'package:teriyaki_bowl_app/views/home_screen.dart';
@@ -49,6 +48,10 @@ class _LoginScreenState extends State<LoginScreen> {
     } else {
       showSnackBar(res, context);
     }
+  }
+
+  Future<void> showSnack(res){
+    return showSnackBar(res, context);
   }
 
   @override

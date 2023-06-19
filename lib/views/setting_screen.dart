@@ -36,15 +36,15 @@ class _SettingScreenState extends State<SettingScreen> {
         name = userData["full_name"];
       });
     } catch (e) {
-      showSnackBar(e.toString(), context);
     }
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    getData();
+    Future.delayed(Duration.zero, () {
+      getData();
+    });
   }
 
   @override

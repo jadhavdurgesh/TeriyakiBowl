@@ -44,7 +44,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    getData();
+    Future.delayed(Duration.zero, () {
+      getData();
+    });
   }
 
   getData() async {
@@ -67,7 +69,6 @@ class _HomeScreenState extends State<HomeScreen> {
         totalCart = cartData['items'].length;
       });
     } catch (e) {
-      showSnackBar(e.toString(), context);
     }
   }
 

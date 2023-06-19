@@ -24,7 +24,9 @@ class _ListCardState extends State<ListCard> {
   @override
   void initState() {
     super.initState();
-    getData();
+    Future.delayed(Duration.zero, () {
+      getData();
+    });
   }
 
   getData() async {

@@ -41,7 +41,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
-    getData();
+    Future.delayed(Duration.zero, () {
+      getData();
+    });
   }
 
   getData() async {
@@ -57,7 +59,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         mobileController.text = userData["mobile"];
       });
     } catch (e) {
-      showSnackBar(e.toString(), context);
     }
   }
 

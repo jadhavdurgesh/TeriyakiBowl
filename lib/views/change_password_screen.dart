@@ -42,7 +42,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   void initState() {
     super.initState();
 
-    getData();
+    Future.delayed(Duration.zero, () {
+      getData();
+    });
   }
 
 
@@ -58,7 +60,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         password = userData['password'];
       });
     } catch (e) {
-      showSnackBar(e.toString(), context);
     }
   }
 

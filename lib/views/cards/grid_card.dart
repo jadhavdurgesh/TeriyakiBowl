@@ -25,7 +25,10 @@ class _GridCardState extends State<GridCard> {
   @override
   void initState() {
     super.initState();
-    getData();
+    Future.delayed(Duration.zero, () {
+      getData();
+    });
+
   }
 
   getData() async {
@@ -37,7 +40,6 @@ class _GridCardState extends State<GridCard> {
         isFav = favourite.contains(widget.snap['iid']);
       });
     } catch (e) {
-      showSnackBar(e.toString(), context);
     }
   }
 

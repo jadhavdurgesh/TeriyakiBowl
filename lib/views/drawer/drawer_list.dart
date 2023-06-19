@@ -149,8 +149,8 @@ class _DrawerListState extends State<DrawerList> {
                             CustomButton(
                               btnText: "Logout",
                               onTap: () async {
-                                await AuthMethods().signOut();
-                                Get.offAll(() => const LoginScreen());
+                                Get.back();
+                                await AuthMethods().signOut(context);
                               },
                             ),
                             16.widthBox,
